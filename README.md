@@ -100,8 +100,7 @@ node check-powerbi-tmdl.js
 
 ## Quickstart
 
-1. Clone or open the project folder in your browser:
-   - Double-click or serve `index.html` via any local HTTP server (e.g. `npx serve .` or `python -m http.server 8000`).
+1. Double-click `launch.bat` (or run `.\launch.bat`) to launch the local HTTP server and automatically open the dashboard in your default browser.
 2. To regenerate the synthetic dataset:
    ```bash
    python generate_mock_data.py --count 2800 --out dashboard-ready.csv
