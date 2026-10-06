@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ApexTrust Operations - Trust &amp; Safety Intelligence Command</title>
+  <link rel="stylesheet" href="brand.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-logo-badge" aria-hidden="true">AT</div>
+        <div>
+          <h1 class="brand-title">ApexTrust Operations</h1>
+          <p class="brand-subtitle">Global Trust &amp; Safety Intelligence Command Center</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="btn-export-pbip" class="btn btn-primary" title="Export Microsoft Power BI Project ZIP">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export Power BI (.pbip)
+        </button>
+        <button id="btn-export-csv" class="btn btn-secondary" title="Export currently filtered dataset as CSV">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Export CSV
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tab Navigation -->
+  <nav class="tab-navigation-bar" aria-label="Dashboard Views">
+    <div class="tab-container" role="tablist">
+      <button id="tab-exec" class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-exec">
+        Executive Operations Hub
+      </button>
+      <button id="tab-queue" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-queue">
+        Queue &amp; Policy Command
+      </button>
+      <button id="tab-quality" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-quality">
+        Quality, Audits &amp; Appeals
+      </button>
+      <button id="tab-capacity" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-capacity">
+        Workforce &amp; Capacity Planner
+      </button>
+    </div>
+  </nav>
+
+  <!-- Global Filter Toolbar -->
+  <section class="filter-toolbar" aria-label="Global Data Filters">
+    <div class="filter-container">
+      <div class="filter-group">
+        <label for="filter-start-date" class="filter-label">From</label>
+        <input type="date" id="filter-start-date" class="filter-input">
+      </div>
+      <div class="filter-group">
+        <label for="filter-end-date" class="filter-label">To</label>
+        <input type="date" id="filter-end-date" class="filter-input">
+      </div>
+      <div class="filter-group">
+        <label for="filter-queue" class="filter-label">Queue</label>
+        <select id="filter-queue" class="filter-select">
+          <option value="All">All Queues</option>
+          <option value="Violence_HighRisk">Violence (High Risk)</option>
+          <option value="Hate_Speech">Hate Speech</option>
+          <option value="Fraud_Scams">Fraud &amp; Scams</option>
+          <option value="Spam_Commercial">Commercial Spam</option>
+          <option value="Emergency_TCO">Emergency TCO (1-Hour)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filter-type" class="filter-label">Media</label>
+        <select id="filter-type" class="filter-select">
+          <option value="All">All Types</option>
+          <option value="Text_Post">Text Post</option>
+          <option value="Static_Image">Static Image</option>
+          <option value="Short_Video">Short Video</option>
+          <option value="Live_Stream">Live Stream</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filter-tenure" class="filter-label">Tenure</label>
+        <select id="filter-tenure" class="filter-select">
+          <option value="All">All Tenures</option>
+          <option value="New Hire (<30d)">New Hire (&lt;30d)</option>
+          <option value="Core (1-6mo)">Core (1-6mo)</option>
+          <option value="Senior (6mo+)">Senior (6mo+)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filter-egregious" class="filter-label">Egregious</label>
+        <select id="filter-egregious" class="filter-select">
+          <option value="All">All Content</option>
+          <option value="1">Egregious Only</option>
+          <option value="0">Non-Egregious Only</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="filter-search" class="filter-label">Search</label>
+        <input type="text" id="filter-search" class="filter-input" placeholder="Keyword, ID, Agent...">
+      </div>
+      <button id="btn-reset-filters" class="btn btn-secondary btn-sm" style="color: var(--text-secondary); border-color: var(--border-medium);">
+        Reset
+      </button>
+      <div id="record-count-badge" class="record-badge">Loading...</div>
+    </div>
+  </section>
+
+  <!-- Main Dashboard Panels -->
+  <main class="main-content">
+
+    <!-- Tab 1: Executive Operations Hub -->
+    <section id="panel-exec" class="tab-panel active" role="tabpanel" aria-labelledby="tab-exec">
+      <!-- Narrative Insights Banner -->
+      <div class="alert-banner" role="region" aria-label="Executive Intelligence Summary">
+        <div class="alert-icon" aria-hidden="true">&#9432;</div>
+        <div>
+          <h2 class="alert-title">Operational Intelligence &amp; SLA Status</h2>
+          <p id="exec-narrative-text" class="alert-text">
+            Analyzing 30-day moderation operations across global queues. Daily throughput and SLA compliance are evaluated against contractual service agreements.
+          </p>
+        </div>
+      </div>
+
+      <!-- Strategic KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card accent-card">
+          <div class="kpi-header">Total Handled Volume</div>
+          <div id="kpi-total-volume" class="kpi-value">--</div>
+          <div class="kpi-footer"><span id="kpi-auto-rate" class="badge badge-info">--% Automated</span> via HITL Triage</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">Fleet Weighted AHT</div>
+          <div id="kpi-weighted-aht" class="kpi-value">-- s</div>
+          <div class="kpi-footer">Target benchmark: &le;90.0s</div>
+        </div>
+        <div class="kpi-card" id="card-sla-compliance">
+          <div class="kpi-header">SLA Attainment Rate</div>
+          <div id="kpi-sla-rate" class="kpi-value">--%</div>
+          <div class="kpi-footer"><span id="badge-sla" class="badge badge-success">Target: &ge;95.0%</span></div>
+        </div>
+        <div class="kpi-card danger-card">
+          <div class="kpi-header">Egregious Incidents</div>
+          <div id="kpi-egregious-count" class="kpi-value">--</div>
+          <div class="kpi-footer">Subject to 5.5h shift caps &amp; wellness checks</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">Audited QA Accuracy</div>
+          <div id="kpi-qa-score" class="kpi-value">--%</div>
+          <div class="kpi-footer"><span id="badge-qa" class="badge badge-success">Target: &ge;98.0%</span></div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid-2">
+        <div class="chart-card col-span-2">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Daily Volume Influx vs. Closed Throughput &amp; SLA Attainment</h3>
+            <p class="chart-subtitle">Tracking daily workload demand against decision execution speed and SLA compliance trendline</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-daily-volume"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Human-in-the-Loop (HITL) Automation Funnel</h3>
+            <p class="chart-subtitle">Volume distribution across auto-triage filters vs manual human review tiers</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-hitl-funnel"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Queue SLA Attainment Leaderboard</h3>
+            <p class="chart-subtitle">Percentage compliance by queue against the contractual 95% SLA target line</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-queue-sla"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Queue & Policy Command -->
+    <section id="panel-queue" class="tab-panel" role="tabpanel" aria-labelledby="tab-queue">
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">Enforcement Action Rate</div>
+          <div id="kpi-action-rate" class="kpi-value">--%</div>
+          <div class="kpi-footer">Removals &amp; restrictions / closed</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">Top Policy Category</div>
+          <div id="kpi-top-category" class="kpi-value" style="font-size: 1.3rem;">--</div>
+          <div class="kpi-footer">Largest operational share</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">Video Modality Share</div>
+          <div id="kpi-video-share" class="kpi-value">--%</div>
+          <div class="kpi-footer">High AHT workload contributor</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">Median Turnaround Time</div>
+          <div id="kpi-median-tat" class="kpi-value">-- m</div>
+          <div class="kpi-footer">Queue wait + active review</div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid-2">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Policy Violation Category Breakdown</h3>
+            <p class="chart-subtitle">Proportion of flagged items categorized under specific platform rules</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-policy-breakdown"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Media Modality Complexity vs. Handling Time (AHT)</h3>
+            <p class="chart-subtitle">Average active review seconds across Text, Image, Video, and Live Stream</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-media-aht"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Diurnal Arrival Curve &amp; Hourly Congestion Grid</h3>
+            <p class="chart-subtitle">Hourly distribution (0-23h) of incoming workload to identify shift peaks</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-diurnal-heatmap"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Enforcement Decision Actions by Queue</h3>
+            <p class="chart-subtitle">Distribution of Approve, Remove, Warning, Suspend, and Escalate actions</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-action-dist"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: Quality, Audits & Appeals Assurance -->
+    <section id="panel-quality" class="tab-panel" role="tabpanel" aria-labelledby="tab-quality">
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card accent-card">
+          <div class="kpi-header">QA Accuracy Score</div>
+          <div id="kpi-quality-score" class="kpi-value">--%</div>
+          <div class="kpi-footer">Independent QA audit benchmark</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">False Positive Rate</div>
+          <div id="kpi-fp-rate" class="kpi-value">--%</div>
+          <div class="kpi-footer">Legitimate content penalized</div>
+        </div>
+        <div class="kpi-card danger-card">
+          <div class="kpi-header">False Negative Rate</div>
+          <div id="kpi-fn-rate" class="kpi-value">--%</div>
+          <div class="kpi-footer">Violating content left live (Risk)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">Appeal Overturn Rate</div>
+          <div id="kpi-overturn-rate" class="kpi-value">--%</div>
+          <div class="kpi-footer"><span id="kpi-appeals-count">--</span> total appeals filed</div>
+        </div>
+      </div>
+
+      <!-- Charts Grid -->
+      <div class="charts-grid-3">
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Audit Error Taxonomy (Pareto)</h3>
+            <p class="chart-subtitle">Classification of quality deviations identified in audits</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-error-pareto"></canvas>
+          </div>
+        </div>
+        <div class="chart-card col-span-2">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Agent Speed vs. Quality Performance Matrix</h3>
+            <p class="chart-subtitle">Quadrant correlation: Average Handling Time (s) vs. Audited QA Accuracy (%)</p>
+          </div>
+          <div class="canvas-container">
+            <canvas id="chart-agent-quadrant"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="charts-grid-2">
+        <div class="chart-card col-span-2">
+          <div class="chart-card-header">
+            <h3 class="chart-title">Appeals Influx &amp; Overturned Reversals Trajectory</h3>
+            <p class="chart-subtitle">Tracking volume of dispute appeals and final reversal rates over time</p>
+          </div>
+          <div class="canvas-container" style="min-height: 220px;">
+            <canvas id="chart-appeals-trend"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audited Incident Table -->
+      <div class="table-card">
+        <div class="chart-card-header">
+          <h3 class="chart-title">Audited Incidents Drill-Through Log</h3>
+          <p class="chart-subtitle">Detailed record view of QA-audited moderation decisions and error tags</p>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table" id="audit-table">
+            <thead>
+              <tr>
+                <th>Review ID</th>
+                <th>Timestamp</th>
+                <th>Agent</th>
+                <th>Tenure</th>
+                <th>Queue</th>
+                <th>Modality</th>
+                <th>Action</th>
+                <th>QA Score</th>
+                <th>Error Tag</th>
+                <th>Overturned</th>
+                <th>Content Snippet</th>
+              </tr>
+            </thead>
+            <tbody id="audit-table-body">
+              <tr><td colspan="11" style="text-align: center;">Loading data records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Workforce & Capacity Planner -->
+    <section id="panel-capacity" class="tab-panel" role="tabpanel" aria-labelledby="tab-capacity">
+      <div class="capacity-layout">
+        <!-- Interactive Controls Card -->
+        <div class="capacity-controls-card">
+          <h3 class="chart-title" style="margin-bottom: 0.35rem;">Operational Parameters (BA Model)</h3>
+          <p class="chart-subtitle" style="margin-bottom: 1.25rem;">Adjust volume forecasts, handling speed, and staffing constraints</p>
+
+          <div class="control-field">
+            <div class="control-header-row">
+              <label for="cap-volume-input" class="control-title">Forecasted Daily Volume</label>
+              <span id="cap-volume-val" class="control-badge-val">10,000 items</span>
+            </div>
+            <input type="range" id="cap-volume-input" class="slider-input" min="1000" max="30000" step="500" value="10000">
+          </div>
+
+          <div class="control-field">
+            <div class="control-header-row">
+              <label for="cap-aht-input" class="control-title">Average Handling Time (AHT)</label>
+              <span id="cap-aht-val" class="control-badge-val">180 s</span>
+            </div>
+            <input type="range" id="cap-aht-input" class="slider-input" min="15" max="300" step="5" value="180">
+          </div>
+
+          <div class="control-field">
+            <div class="control-header-row">
+              <label for="cap-shift-select" class="control-title">Shift Length &amp; Wellness Policy</label>
+            </div>
+            <select id="cap-shift-select" class="filter-select" style="width: 100%;">
+              <option value="8.0">Standard Shift (8.0 Hours - Standard Queues)</option>
+              <option value="5.5">Egregious Queue Safeguard (5.5 Hours - High-Impact Trauma Cap)</option>
+            </select>
+          </div>
+
+          <div class="control-field">
+            <div class="control-header-row">
+              <label for="cap-occupancy-slider" class="control-title">Target Occupancy Rate</label>
+              <span id="cap-occupancy-val" class="control-badge-val">80%</span>
+            </div>
+            <input type="range" id="cap-occupancy-slider" class="slider-input" min="65" max="95" step="1" value="80">
+            <small style="color: var(--text-muted); font-size: 0.72rem;">Safe threshold: 75%–85%. &gt;85% induces rapid quality drops.</small>
+          </div>
+
+          <div class="control-field">
+            <div class="control-header-row">
+              <label for="cap-shrinkage-slider" class="control-title">Total Shrinkage Rate</label>
+              <span id="cap-shrinkage-val" class="control-badge-val">25%</span>
+            </div>
+            <input type="range" id="cap-shrinkage-slider" class="slider-input" min="10" max="45" step="1" value="25">
+            <small style="color: var(--text-muted); font-size: 0.72rem;">Includes breaks, coaching, 1-on-1s, leave, and system latency.</small>
+          </div>
+
+          <div class="control-field" style="margin-bottom: 0;">
+            <div class="control-header-row">
+              <label for="cap-roster-input" class="control-title">Current Active Roster Headcount</label>
+              <span id="cap-roster-val" class="control-badge-val">15 FTEs</span>
+            </div>
+            <input type="number" id="cap-roster-input" class="filter-input" style="width: 100%;" min="1" max="250" value="15">
+          </div>
+        </div>
+
+        <!-- Calculated Outputs Card -->
+        <div class="capacity-output-card">
+          <div>
+            <h3 class="chart-title">Staffing &amp; Capacity Requirements</h3>
+            <p class="chart-subtitle">Mathematical calculations based on Section 5 formulas from the BA Guide</p>
+          </div>
+
+          <div class="output-metrics-grid">
+            <div class="output-metric-box">
+              <div class="output-label">Total Workload Hours</div>
+              <div id="out-workload-hours" class="output-num">500.0 h</div>
+              <small style="color: var(--text-muted); font-size: 0.72rem;">(Volume &times; AHT) / 3,600</small>
+            </div>
+            <div class="output-metric-box">
+              <div class="output-label">Productive Hours / Agent</div>
+              <div id="out-productive-hours" class="output-num">4.80 h</div>
+              <small style="color: var(--text-muted); font-size: 0.72rem;">Shift &times; (1 - Shrink) &times; Occ</small>
+            </div>
+            <div class="output-metric-box" style="border-left: 4px solid var(--brand-primary);">
+              <div class="output-label">Required Headcount (FTEs)</div>
+              <div id="out-required-fte" class="output-num" style="color: var(--brand-primary);">105 FTE</div>
+              <small style="color: var(--text-muted); font-size: 0.72rem;">Workload / Productive Hours</small>
+            </div>
+            <div class="output-metric-box" id="box-staffing-gap">
+              <div class="output-label">Staffing Gap Analysis</div>
+              <div id="out-staffing-gap" class="output-num">--</div>
+              <small id="out-gap-subtitle" style="color: var(--text-muted); font-size: 0.72rem;">Roster vs Required</small>
+            </div>
+          </div>
+
+          <div class="output-metric-box" style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div class="output-label">Erlang-C Queue Delay Risk</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.2rem;">Probability of incoming content queuing before triage</div>
+            </div>
+            <div id="out-erlang-prob" class="output-num" style="font-size: 1.4rem;">--%</div>
+          </div>
+
+          <div class="prescriptive-box">
+            <div class="prescriptive-title">&#10140; Prescriptive Business Analyst Recommendations</div>
+            <ul id="cap-recommendations-list" class="prescriptive-list">
+              <li>Loading operational recommendations...</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Vendor Libraries -->
+  <script src="vendor/papaparse.min.js"></script>
+  <script src="vendor/chart.umd.min.js"></script>
+  <script src="vendor/jszip.min.js"></script>
+
+  <!-- Application Modules -->
+  <script src="stats.js"></script>
+  <script src="capacity.js"></script>
+  <script src="charts.js"></script>
+  <script src="powerbi.js"></script>
+</body>
+</html>
