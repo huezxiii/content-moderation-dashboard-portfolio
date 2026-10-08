@@ -42,6 +42,17 @@ Modeled after modern Business Process Outsourcing (BPO) operational analytics pr
 
 ---
 
+## Executive Briefing Presentation
+
+A 10-minute leadership briefing built on the same dataset, located in [`docs/presentation/`](docs/presentation/):
+
+* **[Slide Deck (`.pptx`)](docs/presentation/ApexTrust_Content_Moderation_Executive_Briefing.pptx)**: Five slides following the *Bottom Line Up Front → What? → So What? → Now What?* framework, plus a backup Q&A slide. Native, editable PowerPoint charts in the Telus palette, with the full spoken script in the speaker notes.
+* **[Presentation Outline & Script](docs/presentation/PRESENTATION_OUTLINE.md)**: Slide-by-slide layout, timing, talking points, spoken script, and anticipated leadership Q&A.
+
+Every figure is computed from `dashboard-ready.csv`, so the deck matches the dashboard: 78.2% SLA attainment, concentrated in the Violence, Hate Speech, and Emergency TCO queues and a Sep 24–27 high-risk mix shift, with a no-new-hire recovery plan.
+
+---
+
 ## Design System & Color Palette
 
 Styled with generic white-labeled enterprise branding utilizing the Telus color palette:
